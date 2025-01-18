@@ -6,7 +6,7 @@ function New-Config($filename) {
 			"args" = ""
 		}
 		"directory" = @{
-			"root" = [Environment]::GetFolderPath("MyDocuments")
+			"root" = "$([Environment]::GetFolderPath("MyDocuments"))\Notes"
 			"daily" = "daily"
 			"ticket" = "ticket"
 			"archive" = "archive"
