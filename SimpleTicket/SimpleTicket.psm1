@@ -20,7 +20,11 @@ if (!(Test-Path "$PSScriptRoot\config.json")) {
 	}
 }
 
-$script:STConfig = (Get-Content "$PSScriptRoot\config.json" -Raw | ConvertFrom-Json)
+try {
+	$script:STConfig = (Get-Content "$PSScriptRoot\config.json" -Raw | ConvertFrom-Json)
+} catch {
+	Throw "[SimpleTicket] Error loading configuration file '$PSScriptRoot\config.json'`nPlease check the file, or delete it and re-import this module to generate a default configuration."
+}
 
 if (!(Test-Path $STConfig.directory.root)) {
 	$confirm = Read-Host "[SimpleTicket] The root directory $($STConfig.directory.root) was not found. Would you like to create it? y/N"
