@@ -11,6 +11,13 @@ function New-Config($filename) {
 			"ticket" = "ticket"
 			"archive" = "archive"
 		}
+		"prefixes" = @(
+			"INC"
+			"REQ"
+		)
+		"subprefixes" = @(
+			"RITM"
+		)
 	}
 
 	$config | ConvertTo-Json | Set-Content -Path $filename

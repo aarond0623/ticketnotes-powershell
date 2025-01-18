@@ -19,3 +19,41 @@ if (!(Test-Path "$PSScriptRoot\config.json")) {
 		Throw "[SimpleTicket] A configuration file is required to run this module."
 	}
 }
+
+$script:STConfig = (Get-Content "$PSScriptRoot\config.json" -Raw | ConvertFrom-Json)
+
+if (!(Test-Path $STConfig.directory.root)) {
+	$confirm = Read-Host "[SimpleTicket] The root directory $($STConfig.directory.root) was not found. Would you like to create it? y/N"
+	if ($confirm.ToLower() -eq "y") {
+		New-Item -Path $STConfig.directory.root -ItemType Directory
+	} else {
+		Throw "[SimpleTicket] The root directory $($STConfig.directory.root) is required to run this module."
+	}
+}
+
+if (!(Test-Path "$($STConfig.directory.root)\$($STConfig.directory.daily)")) {
+	$confirm = Read-Host "[SimpleTicket] The daily directory $($STConfig.directory.daily) was not found. Would you like to create it? y/N"
+	if ($confirm.ToLower() -eq "y") {
+		New-Item -Path "$($STConfig.directory.root)\$($STConfig.directory.daily)" -ItemType Directory
+	} else {
+		Throw "[SimpleTicket] The daily directory $($STConfig.directory.daily) is required to run this module."
+	}
+}
+
+if (!(Test-Path "$($STConfig.directory.root)\$($STConfig.directory.ticket)")) {
+	$confirm = Read-Host "[SimpleTicket] The ticket directory $($STConfig.directory.ticket) was not found. Would you like to create it? y/N"
+	if ($confirm.ToLower() -eq "y") {
+		New-Item -Path "$($STConfig.directory.root)\$($STConfig.directory.ticket)" -ItemType Directory
+	} else {
+		Throw "[SimpleTicket] The ticket directory $($STConfig.directory.ticket) is required to run this module."
+	}
+}
+
+if (!(Test-Path "$($STConfig.directory.root)\$($STConfig.directory.archive)")) {
+	$confirm = Read-Host "[SimpleTicket] The archive directory $($STConfig.directory.archive) was not found. Would you like to create it? y/N"
+	if ($confirm.ToLower() -eq "y") {
+		New-Item -Path "$($STConfig.directory.root)\$($STConfig.directory.archive)" -ItemType Directory
+	} else {
+		Throw "[SimpleTicket] The archive directory $($STConfig.directory.archive) is required to run this module."
+	}
+}
