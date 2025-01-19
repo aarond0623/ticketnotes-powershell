@@ -1,10 +1,10 @@
-# SimpleTicket
+# TicketNotes-PowerShell
 
 A terminal-based PowerShell module for taking, searching through, and managing ticket-based notes.
 
 ## Installation
 
-To install, move the folder "SimpleTicket" to your PowerShell modules folder, which can be found by typing this from within PowerShell:
+To install, move the folder "TicketNotes" to your PowerShell modules folder, which can be found by typing this from within PowerShell:
 
 ```powershell
 $Env:PSMODULEPATH
@@ -14,7 +14,7 @@ The module should be automatically imported the next time you launch PowerShell.
 
 ## Configuration
 
-Configuration is saved in "config.json" in the SimpleTicket directory. If the configuration file does not exist, a default one will be created with the following values:
+Configuration is saved in "config.json" in the TicketNotes directory. If the configuration file does not exist, a default one will be created with the following values:
 
 ```json
 {
@@ -103,7 +103,7 @@ Then turned it on again.
 # Results in "Turned computer off. // Then turned it on again."
 ```
 
-If part of a pipeline, the function returns the ticket number so that you can use it with other SimpleTicket functions.
+If part of a pipeline, the function returns the ticket number so that you can use it with other TicketNotes functions.
 
 ### Get-Note
 

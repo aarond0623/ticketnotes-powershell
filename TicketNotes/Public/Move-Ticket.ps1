@@ -53,9 +53,9 @@ function Move-Ticket {
 			return
 		}
 
-		$notesdir = $STConfig.directory.root
-		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
-		$archivedir = "$notesdir\$($STConfig.directory.archive)"
+		$notesdir = $TNConfig.directory.root
+		$ticketdir = "$notesdir\$($TNConfig.directory.ticket)"
+		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
 		$TicketNumber = $TicketNumber.ToUpper()
 
 		if ($Close -and $Open) {

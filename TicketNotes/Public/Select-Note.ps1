@@ -34,14 +34,14 @@ function Select-Note {
 	)
 
 	Begin {
-		$notesdir = $STConfig.directory.root
-		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
-		$archivedir = "$notesdir\$($STConfig.directory.archive)"
-		$dailydir = "$notesdir\$($STConfig.directory.daily)"
+		$notesdir = $TNConfig.directory.root
+		$ticketdir = "$notesdir\$($TNConfig.directory.ticket)"
+		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
+		$dailydir = "$notesdir\$($TNConfig.directory.daily)"
 	}
 
 	Process {
-		$Regex = ($STConfig.prefixes | Foreach-Object { "^$_" }) -join "|"
+		$Regex = ($TNConfig.prefixes | Foreach-Object { "^$_" }) -join "|"
 		if ($Daily) {
 			$Regex += "|^\d{4}-\d{2}-\d{2}"
 		}

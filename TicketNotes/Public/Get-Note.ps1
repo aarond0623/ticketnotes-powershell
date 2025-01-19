@@ -3,9 +3,9 @@ function helper() {
 	param([Parameter(Position=0, ValueFromPipeline=$true)][String] $TicketNumber)
 
 	Begin {
-		$notesdir = $STConfig.directory.root
-		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
-		$archivedir = "$notesdir\$($STConfig.directory.archive)"
+		$notesdir = $TNConfig.directory.root
+		$ticketdir = "$notesdir\$($TNConfig.directory.ticket)"
+		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
 		$TicketNumber = $TicketNumber.ToUpper()
 
 		if (!($PSBoundParameters.ContainsKey('TicketNumber'))) {
@@ -193,7 +193,7 @@ function Get-LastNote() {
 				Write-Host "    $line"
 			}
 			$TicketText[-1] = $TicketText[-1] -Replace ('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}: ','')
-			$TicketText[-1] = $TicketText[-1] -Replace ("^\[($($STConfig.subprefixes -join '|'))\] ", '')
+			$TicketText[-1] = $TicketText[-1] -Replace ("^\[($($TNConfig.subprefixes -join '|'))\] ", '')
 			$TicketText[-1] = $TicketText[-1] -Replace ('(?<= )// ', "`n")
 			try {
 				Set-Clipboard $TicketText[-1]
@@ -205,7 +205,7 @@ function Get-LastNote() {
 				Write-Host "    $line"
 			}
 			$TicketText = $TicketText -Replace ('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}: ','')
-			$TicketText = $TicketText -Replace ("^\[($($STConfig.subprefixes -join '|'))\] ", '')
+			$TicketText = $TicketText -Replace ("^\[($($TNConfig.subprefixes -join '|'))\] ", '')
 			$TicketText = $TicketText -Replace ('(?<= )// ', "`n")
 			try {
 				Set-Clipboard $TicketText

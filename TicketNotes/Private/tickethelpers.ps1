@@ -1,9 +1,9 @@
 function issubticket($ticket) {
-	$TicketNumber -match "^($($STConfig.subprefixes -join '|'))(\d+)$"
+	$TicketNumber -match "^($($TNConfig.subprefixes -join '|'))(\d+)$"
 }
 
 function findparent($subticket, $directory) {
-	$prefixes = $STConfig.prefixes | Foreach-Object { $_ + "*" }
+	$prefixes = $TNConfig.prefixes | Foreach-Object { $_ + "*" }
 	(Get-ChildItem -Path $directory -Recurse -Include @($prefixes) -Filter "*.txt" `
 	| Select-String "\[$SubTicket\]" `
 	| Select-Object Path -First 1 `

@@ -19,8 +19,8 @@ function Merge-TicketArchive {
 		[Parameter(Mandatory=$true)][Int] $Year
 	)
 	Begin {
-		$notesdir = $STConfig.directory.root
-		$archivedir = "$notesdir\$($STConfig.directory.archive)"
+		$notesdir = $TNConfig.directory.root
+		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
 		$year_archive = "$archivedir\$($Year)_daily.txt"
 		$ticket_archive = "$archivedir\$($Year)_ticket.txt"
 		try {
@@ -48,7 +48,7 @@ function Merge-TicketArchive {
 		Write-Host "Dailies merged into $year_archive"
 
 		# Add all the ticket files to ticket archive
-		$prefixes = $STConfig.prefixes | Foreach-Object { $_ + "*" }
+		$prefixes = $TNConfig.prefixes | Foreach-Object { $_ + "*" }
 		$filelist = Get-ChildItem -Path $archivedir -Recurse -Include @($prefixes) -Filter "*.txt"
 		foreach ($file in $filelist) {
 			Add-Content -Path $ticket_archive -Value "----------------" -Encoding UTF8

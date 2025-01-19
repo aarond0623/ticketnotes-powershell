@@ -49,13 +49,13 @@ function Add-Note() {
 	)
 
 	Begin{
-		$notesdir = $STConfig.directory.root
-		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
-		$archivedir = "$notesdir\$($STConfig.directory.archive)"
-		$dailydir = "$notesdir\$($STConfig.directory.daily)"
+		$notesdir = $TNConfig.directory.root
+		$ticketdir = "$notesdir\$($TNConfig.directory.ticket)"
+		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
+		$dailydir = "$notesdir\$($TNConfig.directory.daily)"
 		$TicketNumber = $TicketNumber.ToUpper()
 		# Test if the ticket number is valid. If not, consider it part of the note.
-		$AllPrefixes = $STConfig.prefixes + $STConfig.subprefixes
+		$AllPrefixes = $TNConfig.prefixes + $TNConfig.subprefixes
 		if ($TicketNumber -notmatch "^($($AllPrefixes -join '|'))(\d+)$") {
 			$NoteText = @($TicketNumber, $NoteText) -join ' '
 			$TicketNumber = $null
@@ -87,21 +87,21 @@ function Add-Note() {
 						$TicketNumber = (Read-Host "Parent Ticket #").ToUpper()
 					}
 				}
-				$TicketFile = "$($STConfig.directory.ticket)\$TicketNumber.txt"
+				$TicketFile = "$($TNConfig.directory.ticket)\$TicketNumber.txt"
 				if (Test-Path $TicketFile) {
 					# Special case for notepad because it does not support multiple files from the command line.
-					if ($STConfig.editor.command -eq "notepad" -or $STConfig.editor.command -eq "notepad.exe") {
-						Start-Process $STConfig.editor.command -Wait -ArgumentList ($STConfig.editor.args + @("temp_note.txt"))
+					if ($TNConfig.editor.command -eq "notepad" -or $TNConfig.editor.command -eq "notepad.exe") {
+						Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
 					} else {
 						# Open the temp_note file and the ticket file in the editor.
-						Start-Process $STConfig.editor.command -Wait -ArgumentList ($STConfig.editor.args + @("temp_note.txt", $TicketFile))
+						Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt", $TicketFile))
 					}
 				} else {
 					# Open only the temp_note file.
-					Start-Process $STConfig.editor.command -Wait -ArgumentList ($STConfig.editor.args + @("temp_note.txt"))
+					Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
 				}
 			} else {
-				Start-Process $STConfig.editor.command -Wait -ArgumentList ($STConfig.editor.args + @("temp_note.txt"))
+				Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
 			}
 			Pop-Location
 			$NoteText = Get-Content -Path $notesdir\temp_note.txt -Encoding UTF8
@@ -163,7 +163,7 @@ function Add-Note() {
 				if ($CopyNote -ne "") {
 					$CopyNote = "$CopyNote`n"
 				}
-				$CopyNote = "$CopyNote$($NoteText -Replace ("^\[($($STConfig.subprefixes -join '|'))(\d+)\] ", '') -Replace ('(?<= )// ', "`n"))"
+				$CopyNote = "$CopyNote$($NoteText -Replace ("^\[($($TNConfig.subprefixes -join '|'))(\d+)\] ", '') -Replace ('(?<= )// ', "`n"))"
 				Set-Clipboard -Value $CopyNote
 				$DailyNote = "$($time): [$TicketNumber] $NoteText"
 				Add-Content -Path $DailyFile $DailyNote -Encoding UTF8
