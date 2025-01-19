@@ -157,7 +157,7 @@ Turned it off and on again.
 
 ### Select-Note
 
-`Search-Note [[-Pattern] <string[]>] [<CommonParameters>]`
+`Select-Note [[-Pattern] <string[]>] [<CommonParameters>]`
 
 Searches notes for a term or terms. By default, the search is only performed on tickets only, and excludes any notes in old files merged with Merge-Archive. If the -Daily switch is used, the search is performed on daily notes as well. If the -Old switch is used, the search is performed on merged notes as well.
 
