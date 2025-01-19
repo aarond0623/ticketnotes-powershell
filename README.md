@@ -52,12 +52,12 @@ Configuration is saved in "config.json" in the SimpleTicket directory. If the co
 
 `Add-Note [[-TicketNumber] <string>] [[-NoteText] <string>]] [-Editor] [<CommonParamters>]`
 
-Adds notes to a daily note file with the current date, and if a ticket number is provided, to the ticket's file as well.
+Adds a note to a ticket or the daily notes file. If the -Editor switch is used, the note is opened in the editor specified in the configuration file. If the note is empty, the user is prompted for input. If the ticket number is not provided, the note is added to the daily notes file. The note is then copied to the clipboard.
 
-The function is meant to be used without specifying the arguments explicitly. For example:
+Examples:
 
 ```powershell
-PS> Add-Note INC012345 "Turned computer off and on again."
+PS> Add-Note INC012345 "Turned it off and on again."
 ```
 
 If a note is not provided, the function will get input *and will stop once you press enter twice.*
@@ -67,6 +67,24 @@ PS> Add-Note INC012345
 Turned computer off and on again.
 
 PS>
+```
+
+You can use the configured editor with the `-Editor` flag:
+
+```powershell
+PS> Add-Note INC012345 -Editor
+```
+
+If you have provided notes already, they will be in the editor when it opens:
+
+```powershell
+PS> Add-Note "Starting my day in paradise" -Editor
+```
+
+The function will also take note text from the pipeline:
+
+```powershell
+PS> "Turned it off and on again" | Add-Note INC012345 -Editor
 ```
 
 If the first argument does not match any of the provided ticket prefixes in config.ini, it will be treated like part of the note:
@@ -82,12 +100,57 @@ PS> Add-Note "Turned computer off." "Then turned it on again."
 PS> Add-Note INC012345
 Turned computer off.
 Then turned it on again.
-
-PS>
 # Results in "Turned computer off. // Then turned it on again."
 ```
 
-**Once a note is entered, it is copied to the clipboard.**
-
 If part of a pipeline, the function returns the ticket number so that you can use it with other SimpleTicket functions.
 
+### Get-Note
+
+`Get-Note [[-TicketNumber] <string>] [<CommonParameters>]`
+
+Displays the notes for a ticket. If the ticket number is not provided, the user is prompted for input. If the ticket number is not found, an error is displayed. Double slashes are used to separate lines in a note, and are displayed as newlines with this function. The note is also copied to the clipboard with some formatting changes.
+
+Examples:
+
+```powershell
+PS> Get-Note INC012345
+```
+```
+    INC012345: John Doe @ Office A (555) 555-555 - My computer won't turn on.
+    2025-01-18 11:00: Turned it off and on again.
+```
+
+```powershell
+PS> Add-Note INC012345 "Turned it off and on again." | Get-Note
+```
+```
+Turned it off and on again.
+
+    INC012345: John Doe @ Office A (555) 555-555 - My computer won't turn on.
+    2025-01-18 11:00: Turned it off and on again.
+```
+
+### Get-LastNote
+
+Displays the last note for a ticket. If the ticket number is not provided, the user is prompted for input. If the ticket number is not found, an error is displayed. Double slashes are used to separate lines in a note, and are displayed as newlines with this function. The note is also copied to the clipboard with some formatting changes.
+
+Examples:
+
+```powershell
+PS> Get-LastNote INC012345
+```
+```
+    2025-01-18 11:00: Turned it off and on again.
+```
+
+```powershell
+PS> Add-Note INC012345 "Turned it off and on again." | Get-LastNote
+```
+```
+Turned it off and on again.
+
+    2025-01-18 11:00: Turned it off and on again.
+```
+
+### Search-Note

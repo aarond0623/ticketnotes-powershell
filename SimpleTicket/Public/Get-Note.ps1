@@ -58,6 +58,34 @@ function helper() {
 }
 
 function Get-Note() {
+	<#
+	.SYNOPSIS
+	Displays the notes for a ticket.
+
+	.DESCRIPTION
+	Displays the notes for a ticket. If the ticket number is not provided, the
+	user is prompted for input. If the ticket number is not found, an error is
+	displayed. Double slashes are used to separate lines in a note, and are
+	displayed as newlines with this function. The note is also copied to the
+	clipboard with some formatting changes.
+
+	.PARAMETER TicketNumber
+	The ticket number to display notes for. If this parameter is not provided,
+	the user is prompted for input.
+
+	.INPUTS
+	System.String. Takes TicketNumber as input.
+
+	.OUTPUTS
+	System.String. Returns TicketNumber as output if not the last part of a
+	pipeline.
+
+	.EXAMPLE
+	PS> Get-Note INC012345
+
+	.EXAMPLE
+	PS> Add-Note INC012345 "Turned it off and on again." | Get-Note
+	#>
 	[CmdletBinding()]
 	param(
 		[Parameter(Position=0, ValueFromPipeline=$true)][String] $TicketNumber
@@ -104,6 +132,34 @@ function Get-Note() {
 }
 
 function Get-LastNote() {
+	<#
+	.SYNOPSIS
+	Displays the last note for a ticket.
+
+	.DESCRIPTION
+	Displays the last note for a ticket. If the ticket number is not provided,
+	the user is prompted for input. If the ticket number is not found, an error
+	is displayed. Double slashes are used to separate lines in a note, and are
+	displayed as newlines with this function. The note is also copied to the
+	clipboard with some formatting changes.
+
+	.PARAMETER TicketNumber
+	The ticket number to display the note for. If this parameter is not provided,
+	the user is prompted for input.
+
+	.INPUTS
+	System.String. Takes TicketNumber as input.
+
+	.OUTPUTS
+	System.String. Returns TicketNumber as output if not the last part of a
+	pipeline.
+
+	.EXAMPLE
+	PS> Get-LastNote INC012345
+
+	.EXAMPLE
+	PS> Add-Note INC012345 "Turned it off and on again." | Get-LastNote
+	#>
 	[CmdletBinding()]
 	param(
 		[Parameter(Position=0, ValueFromPipeline=$true)][String] $TicketNumber

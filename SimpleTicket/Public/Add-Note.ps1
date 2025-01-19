@@ -1,4 +1,47 @@
 function Add-Note() {
+	<#
+	.SYNOPSIS
+	Adds a note to a ticket or the daily notes file.
+
+	.DESCRIPTION
+	Adds a note to a ticket or the daily notes file. If the -Editor switch is
+	used, the note is opened in the editor specified in the configuration file.
+	If the note is empty, the user is prompted for input. If the ticket number is
+	not provided, the note is added to the daily notes file. The note is then
+	copied to the clipboard.
+
+	.PARAMETER TicketNumber
+	The ticket number to add the note to. If the ticket number is not provided,
+	the note is only added to the daily notes file. For ease of use, if this
+	parameter does not match the ticket number format, it is considered part of
+	the note text.
+
+	.PARAMETER NoteText
+	The text of the note to add. If this parameter is not provided, the user is
+	prompted for input.
+
+	.INPUTS
+	System.String. Takes NoteText as input.
+
+	.OUTPUTS
+	System.String. Returns TicketNumber as output if not the last part of a
+	pipeline.
+
+	.EXAMPLE
+	PS> Add-Note INC012345 "Turned it off and on again."
+
+	.EXAMPLE
+	PS> Add-Note INC012345
+
+	.EXAMPLE
+	PS> Add-Note INC012345 -Editor
+
+	.EXAMPLE
+	PS> Add-Note "Starting my day in paradise" -Editor
+
+	.EXAMPLE
+	PS> "Turned it off and on again" | Add-Note INC012345 -Editor
+	#>
 	param(
 		[Parameter(Position=0, Mandatory=$false)][String] $TicketNumber,
 		[Parameter(Position=1, Mandatory=$false, ValueFromPipeline=$true)][String] $NoteText,
@@ -6,6 +49,7 @@ function Add-Note() {
 	)
 
 	Begin{
+		Write-Host $NoteText
 		$notesdir = $STConfig.directory.root
 		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
 		$archivedir = "$notesdir\$($STConfig.directory.archive)"
@@ -14,7 +58,7 @@ function Add-Note() {
 		# Test if the ticket number is valid. If not, consider it part of the note.
 		$AllPrefixes = $STConfig.prefixes + $STConfig.subprefixes
 		if ($TicketNumber -notmatch "^($($AllPrefixes -join '|'))(\d+)$") {
-			$NoteText = $TicketNumber + " " + $NoteText
+			$NoteText = @($TicketNumber, $NoteText) -join ' '
 			$TicketNumber = $null
 		}
 
@@ -24,6 +68,9 @@ function Add-Note() {
 				Read-Host | Set-Variable r; if (!$r) { break }; $r
 			}
 		}
+	}
+
+	Process {
 		# Open the editor if the -Editor switch is used.
 		if ($Editor) {
 			Push-Location $notesdir
@@ -61,10 +108,8 @@ function Add-Note() {
 			$NoteText = $NoteText -Replace (' //([^ ])', ' // $1') # Add a space after each double slash.
 			Remove-Item -Path $notesdir\temp_note.txt
 		}
-	}
 
-	Process {
-		if (($NoteText.Length -eq 0) -or (($NoteText.Length -eq 1) -and ($NoteText[0] -eq "`0"))) {
+		if (($NoteText.Length -eq 0) -or (($NoteText.Length -eq 1) -and ($NoteText[0] -match "^\s+$|^\0$"))) {
 			if (!($TicketNumber)) {
 				return
 			}
