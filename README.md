@@ -10,7 +10,7 @@ To install, move the folder "TicketNotes" to your PowerShell modules folder, whi
 $Env:PSMODULEPATH
 ```
 
-The module should be automatically imported the next time you launch PowerShell.
+Then import the module using `Import-Module TicketNotes`. To do this automatically, you can place that command into your PowerShell profile.
 
 ## Configuration
 
