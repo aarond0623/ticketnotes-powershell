@@ -116,7 +116,7 @@ function Add-Note() {
 			# For initializing tickets without a note.
 			if (issubticket $TicketNumber) {
 				$TicketNumber = findparent $SubTicket $ticketdir
-				if (TicketNumber) {
+				if ($TicketNumber) {
 					Write-Error "Ticket exists. Please provide a note."
 					return
 				} else {
@@ -142,7 +142,7 @@ function Add-Note() {
 				if (issubticket $TicketNumber) {
 					$SubTicket = $TicketNumber
 					$TicketNumber = findparent $SubTicket $ticketdir
-					if (!(TicketNumber)) {
+					if (!($TicketNumber)) {
 						$TicketNumber = (Read-Host "Parent Ticket #").ToUpper()
 					}
 				}
