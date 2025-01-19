@@ -154,7 +154,7 @@ function Add-Note() {
 				$TicketFile = "$ticketdir\$TicketNumber.txt"
 				if (!(Test-Path $TicketFile)) {
 					if (Test-Path "$archivedir\$TicketNumber.txt") {
-						Set-Ticket $TicketNumber -Open
+						Move-Ticket $TicketNumber -Open
 					} else {
 						$header = createheader $TicketNumber
 						Add-Content -Path $TicketFile $header -Encoding UTF8

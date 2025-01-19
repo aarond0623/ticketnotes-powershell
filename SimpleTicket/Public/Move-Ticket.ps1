@@ -1,4 +1,4 @@
-function Set-Ticket {
+function Move-Ticket {
 	<#
 	.SYNOPSIS
 	Moves ticket files between the ticket and archive directories.
@@ -27,10 +27,10 @@ function Set-Ticket {
 	pipeline.
 
 	.EXAMPLE
-	PS> Set-Ticket INC012345 -Open
+	PS> Move-Ticket INC012345 -Open
 
 	.EXAMPLE
-	PS> Add-Note INC012345 "Turned it off and on again." | Set-Ticket -Close
+	PS> Add-Note INC012345 "Turned it off and on again." | Move-Ticket -Close
 	#>
 	[CmdletBinding()]
 	param(
@@ -102,7 +102,7 @@ function Set-Ticket {
 		} catch {
 			# We have duplicate tickets and have to merge them
 			Get-Content "$ticketdir\$TicketFile" -Encoding UTF8 `
-			| Add -Content -Path "$archivedir\$TicketFile" -Encoding UTF8
+			| Add-Content -Path "$archivedir\$TicketFile" -Encoding UTF8
 			Remove-Item "$ticketdir\$TicketFile"
 			Move-Item -Path "$archivedir\$TicketFile" -Destination "$todir\$TicketFile"
 			Write-Host $success
