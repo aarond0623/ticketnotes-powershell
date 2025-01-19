@@ -14,10 +14,10 @@ function Select-Note {
 	The term or terms to search for.
 
 	.EXAMPLE
-	PS> Search-Note "off and on"
+	PS> Select-Note "off and on"
 
 	.EXAMPLE
-	PS> Search-Note "off", "on"
+	PS> Select-Note "off", "on"
 	#>
 	[CmdletBinding()]
 	param(
@@ -34,7 +34,7 @@ function Select-Note {
 	}
 
 	Process {
-		$Regex = (STConfig.prefixes | Foreach-Object { "^$_" }) -join "|")
+		$Regex = ($STConfig.prefixes | Foreach-Object { "^$_" }) -join "|"
 		if ($Daily) {
 			$Regex += "|^\d{4}-\d{2}-\d{2}"
 		}
@@ -46,21 +46,21 @@ function Select-Note {
 		}
 		$FileList = (Get-ChildItem -Path $notesdir -Recurse -Filter "*.txt" `
 		| Where-Object { $_.BaseName -match $Regex })
-		foreach ($term in $Search) {
+		foreach ($term in $Pattern) {
 			$FileList = $FileList | Where-Object { $_ | Select-String -Pattern $term }
 		}
 		foreach ($File in $FileList) {
 			$Folder = Split-Path (Split-Path $File.Fullname -Parent) -Leaf
 			Write-Host -ForegroundColor Blue "`n    $folder\$($File.BaseName):"
-			$Results = Select-String -Pattern $Search -Path $File.FullName
+			$Results = Select-String -Pattern $Pattern -Path $File.FullName
 			foreach ($Result in $Results) {
 				$Result = Format-Wordwrap $Result.Line
 				foreach ($line in $Result) {
 					Write-Host -NoNewLine "    "
-					if ($line -match "$($Search -join "|")") {
-						$line = $line -split "($($Search -join "|"))"
+					if ($line -match "$($Pattern -join "|")") {
+						$line = $line -split "($($Pattern -join "|"))"
 						foreach ($part in $line) {
-							if ($part -match "$($Search -join "|")") {
+							if ($part -match "$($Pattern -join "|")") {
 								Write-Host -ForegroundColor Yellow -NoNewLine $part
 							} else {
 								Write-Host -NoNewLine $part
