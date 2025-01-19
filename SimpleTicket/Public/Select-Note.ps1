@@ -1,4 +1,4 @@
-function Search-Note {
+function Select-Note {
 	<#
 	.SYNOPSIS
 	Searches notes for a term or terms.
@@ -10,9 +10,8 @@ function Search-Note {
 	notes as well. If the -Old switch is used, the search is performed on merged
 	notes as well.
 
-	.PARAMETER TicketNumber
-	The ticket number to display the note for. If this parameter is not provided,
-	the user is prompted for input.
+	.PARAMETER Pattern
+	The term or terms to search for.
 
 	.EXAMPLE
 	PS> Search-Note "off and on"
@@ -22,7 +21,7 @@ function Search-Note {
 	#>
 	[CmdletBinding()]
 	param(
-		[Parameter(Position=0, Mandatory=$true)][String[]] $Search,
+		[Parameter(Position=0, Mandatory=$true)][String[]] $Pattern,
 		[Switch] $Daily,
 		[Switch] $Old
 	)
@@ -35,38 +34,28 @@ function Search-Note {
 	}
 
 	Process {
-		$FileList = Get-ChildItem -Path $notesdir -Recurse -Include "*.txt"
+		$Regex = (STConfig.prefixes | Foreach-Object { "^$_" }) -join "|")
+		if ($Daily) {
+			$Regex += "|^\d{4}-\d{2}-\d{2}"
+		}
+		if ($Old) {
+			$Regex += "|^\d{4}_ticket"
+		}
+		if ($Old -and $Daily) {
+			$Regex += "|^\d{4}_daily"
+		}
+		$FileList = (Get-ChildItem -Path $notesdir -Recurse -Filter "*.txt" `
+		| Where-Object { $_.BaseName -match $Regex })
 		foreach ($term in $Search) {
 			$FileList = $FileList | Where-Object { $_ | Select-String -Pattern $term }
 		}
 		foreach ($File in $FileList) {
 			$Folder = Split-Path (Split-Path $File.Fullname -Parent) -Leaf
-			if (!$Daily -and $File.BaseName -match "\d{4}-\d{2}-\d{2}") {
-				continue
-			}
-			if (!$Daily -and $Old -and $File.BaseName -match "\d{4}_daily") {
-				continue
-			}
-			if (!$Old -and $File.BaseName -match "\d{4}_") {
-				continue
-			}
 			Write-Host -ForegroundColor Blue "`n    $folder\$($File.BaseName):"
 			$Results = Select-String -Pattern $Search -Path $File.FullName
-			foreach ($result in $results) {
-				if ($Old -and $File.BaseName -match '\d{4}_') {
-					$skip = $False
-					foreach ($term in $search) {
-						if ($result -notmatch $term) {
-							$skip = $True
-							break
-						}
-					}
-					if ($skip) {
-						continue
-					}
-				}
-				$result = Format-Wordwrap $result.Line
-				foreach ($line in $result) {
+			foreach ($Result in $Results) {
+				$Result = Format-Wordwrap $Result.Line
+				foreach ($line in $Result) {
 					Write-Host -NoNewLine "    "
 					if ($line -match "$($Search -join "|")") {
 						$line = $line -split "($($Search -join "|"))"
