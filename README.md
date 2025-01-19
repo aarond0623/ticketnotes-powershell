@@ -186,14 +186,14 @@ PS> Move-Ticket INC012345 -Open
 PS> Add-Note INC012345 "Turned it off and on again." | Move-Ticket -Close
 ```
 
-### Merge-Archive
+### Merge-TicketArchive
 
-`Merge-Archive [-Year] <int> [<CommonParameters>]`
+`Merge-TicketArchive [-Year] <int> [<CommonParameters>]`
 
 Merges daily and ticket files into yearly archives. Daily files are merged into a single file named YYYY_daily.txt, where YYYY is the year. Ticket files are merged into a single file named YYYY_ticket.txt, where YYYY is the year.
 
 Examples:
 
 ```powershell
-PS> Merge-Archive 2025
+PS> Merge-TicketArchive 2025
 ```

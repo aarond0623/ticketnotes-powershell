@@ -1,4 +1,4 @@
-function Merge-Archive {
+function Merge-TicketArchive {
 	<#
 	.SYNOPSIS
 	Merges daily and ticket files into yearly archives.
@@ -12,7 +12,7 @@ function Merge-Archive {
 	The year to merge. If not provided, the user is prompted for input.
 
 	.EXAMPLE
-	PS> Merge-Archive 2025
+	PS> Merge-TicketArchive 2025
 	#>
 	[CmdletBinding()]
 	param(
