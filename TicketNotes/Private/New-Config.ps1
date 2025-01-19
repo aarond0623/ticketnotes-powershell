@@ -1,13 +1,13 @@
 function New-Config($filename) {
 	# Default configuration
-	if ($IsWindows) {
-		$editor = "notepad"
-		$editorArgs = ""
-		$root = "$([Environment]::GetFolderPath("MyDocuments"))\Notes"
-	} else {
+	if ($IsLinux) {
 		$editor = "vim"
 		$editorArgs = "-o"
 		$root = "$($Env:HOME)/Documents/Notes"
+	} else {
+		$editor = "notepad"
+		$editorArgs = ""
+		$root = "$([Environment]::GetFolderPath("MyDocuments"))\Notes"
 	}
 	$config = [PSCustomObject]@{
 		"editor" = @{
