@@ -1,4 +1,37 @@
 function Set-Ticket {
+	<#
+	.SYNOPSIS
+	Moves ticket files between the ticket and archive directories.
+
+	.DESCRIPTION
+	Moves ticket files between the ticket and archive directories. -Close moves
+	the ticket file from the ticket directory to the archive directory. -Open
+	moves the ticket file from the archive directory to the ticket directory. If
+	a ticket exists in both directories, the ticket files are merged and the
+	merged file is moved to the destination directory.
+
+	.PARAMETER TicketNumber
+	The ticket number to move. If not provided, the user is prompted for input.
+
+	.PARAMETER Close
+	Move the ticket file from the ticket directory to the archive directory.
+
+	.PARAMETER Open
+	Move the ticket file from the archive directory to the ticket directory.
+
+	.INPUTS
+	System.String. Takes TicketNumber as input.
+
+	.OUTPUTS
+	System.String. Returns TicketNumber as output if not the last part of a
+	pipeline.
+
+	.EXAMPLE
+	PS> Set-Ticket INC012345 -Open
+
+	.EXAMPLE
+	PS> Add-Note INC012345 "Turned it off and on again." | Set-Ticket -Close
+	#>
 	[CmdletBinding()]
 	param(
 		[Alias("Closed", "C")][Switch] $Close,

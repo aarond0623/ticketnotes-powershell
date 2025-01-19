@@ -133,6 +133,8 @@ Turned it off and on again.
 
 ### Get-LastNote
 
+`Get-LastNote [[-TicketNumber] <string>] [<CommonParameters>]`
+
 Displays the last note for a ticket. If the ticket number is not provided, the user is prompted for input. If the ticket number is not found, an error is displayed. Double slashes are used to separate lines in a note, and are displayed as newlines with this function. The note is also copied to the clipboard with some formatting changes.
 
 Examples:
@@ -154,3 +156,44 @@ Turned it off and on again.
 ```
 
 ### Search-Note
+
+`Search-Note [[-Search] <string[]>] [<CommonParameters>]`
+
+Searches notes for a term or terms. By default, the search is only performed on tickets only, and excludes any notes in old files merged with Merge-Archive. If the -Daily switch is used, the search is performed on daily notes as well. If the -Old switch is used, the search is performed on merged notes as well.
+
+Examples:
+
+```powershell
+PS> Search-Note "off and on"
+```
+```
+    2025-01-18 11:00: Turned it off and on again.
+```
+
+### Set-Ticket
+
+`Set-Ticket [[-TicketNumber] <string>] [-Close] [-Open] [<CommonParameters>]`
+
+Moves ticket files between the ticket and archive directories. -Close moves the ticket file from the ticket directory to the archive directory. -Open moves the ticket file from the archive directory to the ticket directory. If a ticket exists in both directories, the ticket files are merged and the merged file is moved to the destination directory.
+
+Examples:
+
+```powershell
+PS> Set-Ticket INC012345 -Open
+```
+
+```powershell
+PS> Add-Note INC012345 "Turned it off and on again." | Set-Ticket -Close
+```
+
+### Merge-Archive
+
+`Merge-Archive [-Year] <int> [<CommonParameters>]`
+
+Merges daily and ticket files into yearly archives. Daily files are merged into a single file named YYYY_daily.txt, where YYYY is the year. Ticket files are merged into a single file named YYYY_ticket.txt, where YYYY is the year.
+
+Examples:
+
+```powershell
+PS> Merge-Archive 2025
+```

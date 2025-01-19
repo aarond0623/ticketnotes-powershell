@@ -1,5 +1,19 @@
 function Merge-Archive {
-	# Puts all archived tickets into two big text files
+	<#
+	.SYNOPSIS
+	Merges daily and ticket files into yearly archives.
+
+	.DESCRIPTION
+	Merges daily and ticket files into yearly archives. Daily files are merged
+	into a single file named YYYY_daily.txt, where YYYY is the year. Ticket files
+	are merged into a single file named YYYY_ticket.txt, where YYYY is the year.
+
+	.PARAMETER Year
+	The year to merge. If not provided, the user is prompted for input.
+
+	.EXAMPLE
+	PS> Merge-Archive 2025
+	#>
 	[CmdletBinding()]
 	param(
 		[Parameter(Mandatory=$true)][Int] $Year
