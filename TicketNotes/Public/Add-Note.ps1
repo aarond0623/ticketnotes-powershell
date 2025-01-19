@@ -95,7 +95,7 @@ function Add-Note() {
 						Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 					} else {
 						# Open the temp_note file and the ticket file in the editor.
-						$EditorArgs, "`"$TicketFile`"" -join ' '
+						$EditorArgs = $EditorArgs, "`"$TicketFile`"" -join ' '
 						Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 					}
 				} else {
