@@ -49,7 +49,6 @@ function Add-Note() {
 	)
 
 	Begin{
-		Write-Host $NoteText
 		$notesdir = $STConfig.directory.root
 		$ticketdir = "$notesdir\$($STConfig.directory.ticket)"
 		$archivedir = "$notesdir\$($STConfig.directory.archive)"
@@ -65,8 +64,10 @@ function Add-Note() {
 		# If there's absolutely no note text, prompt the user for input.
 		if (!($NoteText) -and !($MyInvocation.ExpectingInput) -and !($Editor)) {
 			$NoteText = while($true) {
-				Read-Host | Set-Variable r; if (!$r) { break }; $r
+				Read-Host | Set-Variable r; if (!$r) { break }; "$r`n"
 			}
+			$NoteText = $NoteText.Trim()
+			$NoteText = ($NoteText -Split "`n") -join " //"
 		}
 	}
 
@@ -106,6 +107,7 @@ function Add-Note() {
 			$NoteText = Get-Content -Path $notesdir\temp_note.txt -Encoding UTF8
 			$NoteText = $NoteText -Join ' //' # Replace newlines with double slashes.
 			$NoteText = $NoteText -Replace (' //([^ ])', ' // $1') # Add a space after each double slash.
+			$NoteText = $NoteText -Replace ('/s+///s+', ' // ') # Remove extra spaces around double slashes.
 			Remove-Item -Path $notesdir\temp_note.txt
 		}
 
