@@ -167,6 +167,7 @@ Examples:
 PS> Select-Note "off and on"
 ```
 ```
+ticket\INC012345.txt:2:
     2025-01-18 11:00: Turned it off and on again.
 ```
 
