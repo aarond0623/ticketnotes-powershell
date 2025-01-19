@@ -51,38 +51,36 @@ function Select-Note {
 		if ($Old -and $Daily) {
 			$Regex += "|^\d{4}_daily"
 		}
-		$FileList = (Get-ChildItem -Path $notesdir -Recurse -Filter "*.txt" `
-		| Where-Object { $_.BaseName -match $Regex })
-		foreach ($term in $Pattern) {
-			$FileList = $FileList | Where-Object { $_ | Select-String -Pattern $term }
-		}
-		foreach ($File in $FileList) {
-			$Folder = Split-Path (Split-Path $File.Fullname -Parent) -Leaf
-			Write-Host -ForegroundColor Blue "`n    $folder\$($File.BaseName):"
-			$Results = Select-String -Pattern $Pattern -Path $File.FullName
-			foreach ($Result in $Results) {
-				$Result = Format-Wordwrap $Result.Line
-				foreach ($line in $Result) {
-					Write-Host -NoNewLine "    "
-					if ($line -match "$($Pattern -join "|")") {
-						$line = $line -split "($($Pattern -join "|"))"
-						foreach ($part in $line) {
-							if ($part -match "$($Pattern -join "|")") {
-								Write-Host -ForegroundColor Yellow -NoNewLine $part
-							} else {
-								Write-Host -NoNewLine $part
-							}
-						}
-					} else {
-						Write-Host $line
-					}
-					Write-Host
-				}
-			}
-		}
 		Write-Host
+		Get-ChildItem -Path $notesdir -Recurse -Filter "*.txt" `
+		| Where-Object { $_.BaseName -match $Regex } `
+		| Select-String -Pattern $Pattern `
+		| Tee-Object -Variable SelectStringResults `
+		| Foreach-Object {
+			$Folder = Split-Path (Split-Path $_.Path -Parent) -Leaf
+			$File = Split-Path $_.Path -Leaf
+			Write-Host -ForegroundColor Blue "$Folder\$($File):$($_.LineNumber):"
+			$Result = Format-Wordwrap $_.Line
+			Foreach ($Line in $Result) {
+				Write-Host -NoNewLine "    "
+				if ($Line -match "$($Pattern -join "|")") {
+					$Line = $Line -split "($($Pattern -join "|"))"
+					Foreach ($Part in $Line) {
+						if ($Part -match "$($Pattern -join "|")") {
+							Write-Host -BackgroundColor Yellow -ForegroundColor Black -NoNewLine $Part
+						} else {
+							Write-Host -NoNewLine $Part
+						}
+					}
+				} else {
+					Write-Host $Line -NoNewLine
+				}
+				Write-Host
+			}
+			Write-Host
+		}
 		if ($MyInvocation.PipelinePosition -lt $MyInvocation.PipelineLength) {
-			$FileList | Select-String -Pattern $Pattern
+			$SelectStringResults
 		}
 	}
 
