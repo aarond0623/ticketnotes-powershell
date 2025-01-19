@@ -76,6 +76,7 @@ function Add-Note() {
 		if ($Editor) {
 			Push-Location $notesdir
 			Add-Content -Path "temp_note.txt" $NoteText -Encoding UTF8
+			$EditorArgs = $TNConfig.editor.args, '"temp_note.txt"' -join ' '
 			if ($TicketNumber) {
 				if (issubticket $TicketNumber) {
 					# This is a subticket number. Find the parent ticket.
@@ -91,17 +92,18 @@ function Add-Note() {
 				if (Test-Path $TicketFile) {
 					# Special case for notepad because it does not support multiple files from the command line.
 					if ($TNConfig.editor.command -eq "notepad" -or $TNConfig.editor.command -eq "notepad.exe") {
-						Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
+						Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 					} else {
 						# Open the temp_note file and the ticket file in the editor.
-						Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt", $TicketFile))
+						$EditorArgs, "`"$TicketFile`"" -join ' '
+						Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 					}
 				} else {
 					# Open only the temp_note file.
-					Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
+					Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 				}
 			} else {
-				Start-Process $TNConfig.editor.command -Wait -ArgumentList ($TNConfig.editor.args + @("temp_note.txt"))
+				Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 			}
 			Pop-Location
 			$NoteText = Get-Content -Path $notesdir\temp_note.txt -Encoding UTF8
