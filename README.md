@@ -87,3 +87,7 @@ PS>
 # Results in "Turned computer off. // Then turned it on again."
 ```
 
+**Once a note is entered, it is copied to the clipboard.**
+
+If part of a pipeline, the function returns the ticket number so that you can use it with other SimpleTicket functions.
+

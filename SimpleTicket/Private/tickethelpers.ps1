@@ -4,7 +4,7 @@ function issubticket($ticket) {
 
 function findparent($subticket, $directory) {
 	$prefixes = $STConfig.prefixes | Foreach-Object { $_ + "*" }
-	(Get-ChildItem -Path $directory -Recurse -Include @($prefixes) `
+	(Get-ChildItem -Path $directory -Recurse -Include @($prefixes) -Filter "*.txt" `
 	| Select-String "\[$SubTicket\]" `
 	| Select-Object Path -First 1 `
 	| Get-Item).BaseName
