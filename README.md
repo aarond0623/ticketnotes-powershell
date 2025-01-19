@@ -117,7 +117,7 @@ Examples:
 PS> Get-Note INC012345
 ```
 ```
-    INC012345: John Doe @ Office A (555) 555-555 - My computer won't turn on.
+    INC012345: John Doe @ Office A (555-555-5555); DESKTOP42 - My computer won't turn on.
     2025-01-18 11:00: Turned it off and on again.
 ```
 
