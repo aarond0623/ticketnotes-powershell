@@ -170,20 +170,20 @@ PS> Select-Note "off and on"
     2025-01-18 11:00: Turned it off and on again.
 ```
 
-### Set-Ticket
+### Move-Ticket
 
-`Set-Ticket [[-TicketNumber] <string>] [-Close] [-Open] [<CommonParameters>]`
+`Move-Ticket [[-TicketNumber] <string>] [-Close] [-Open] [<CommonParameters>]`
 
 Moves ticket files between the ticket and archive directories. -Close moves the ticket file from the ticket directory to the archive directory. -Open moves the ticket file from the archive directory to the ticket directory. If a ticket exists in both directories, the ticket files are merged and the merged file is moved to the destination directory.
 
 Examples:
 
 ```powershell
-PS> Set-Ticket INC012345 -Open
+PS> Move-Ticket INC012345 -Open
 ```
 
 ```powershell
-PS> Add-Note INC012345 "Turned it off and on again." | Set-Ticket -Close
+PS> Add-Note INC012345 "Turned it off and on again." | Move-Ticket -Close
 ```
 
 ### Merge-Archive
