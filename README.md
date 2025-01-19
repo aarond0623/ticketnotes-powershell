@@ -164,7 +164,7 @@ Searches notes for a term or terms. By default, the search is only performed on 
 Examples:
 
 ```powershell
-PS> Search-Note "off and on"
+PS> Select-Note "off and on"
 ```
 ```
     2025-01-18 11:00: Turned it off and on again.

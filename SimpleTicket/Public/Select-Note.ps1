@@ -13,6 +13,13 @@ function Select-Note {
 	.PARAMETER Pattern
 	The term or terms to search for.
 
+	.INPUTS
+	None. Does not accept input from the pipeline.
+
+	.OUTPUTS
+	Microsoft.PowerShell.Commands.MatchInfo. Returns a Select-String object if
+	not the last part of a pipeline.
+
 	.EXAMPLE
 	PS> Select-Note "off and on"
 
@@ -74,6 +81,9 @@ function Select-Note {
 			}
 		}
 		Write-Host
+		if ($MyInvocation.PipelinePosition -lt $MyInvocation.PipelineLength) {
+			$FileList | Select-String -Pattern $Pattern
+		}
 	}
 
 	End {}
