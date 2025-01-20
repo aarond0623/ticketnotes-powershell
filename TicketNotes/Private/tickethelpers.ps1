@@ -1,5 +1,6 @@
 function issubticket($ticket) {
-	$TicketNumber -match "^($($TNConfig.subprefixes -join '|'))(\d+)$"
+	($TicketNumber -match "^($($TNConfig.subprefixes -join '|'))(\d+)$") `
+	-and $TNConfig.subprefixes
 }
 
 function findparent($subticket, $directory) {
