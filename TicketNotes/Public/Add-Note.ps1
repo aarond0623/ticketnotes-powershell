@@ -53,12 +53,13 @@ function Add-Note() {
 		$ticketdir = "$notesdir\$($TNConfig.directory.ticket)"
 		$archivedir = "$notesdir\$($TNConfig.directory.archive)"
 		$dailydir = "$notesdir\$($TNConfig.directory.daily)"
-		$TicketNumber = $TicketNumber.ToUpper()
 		# Test if the ticket number is valid. If not, consider it part of the note.
 		$AllPrefixes = $TNConfig.prefixes + $TNConfig.subprefixes
-		if ($TicketNumber -notmatch "^($($AllPrefixes -join '|'))(\d+)$") {
+		if ($TicketNumber.ToUpper() -notmatch "^($($AllPrefixes -join '|'))(\d+)$") {
 			$NoteText = @($TicketNumber, $NoteText) -join ' '
 			$TicketNumber = $null
+		} else {
+			$TicketNumber = $TicketNumber.ToUpper()
 		}
 
 		# If there's absolutely no note text, prompt the user for input.
@@ -106,10 +107,12 @@ function Add-Note() {
 				Start-Process $TNConfig.editor.command -Wait -ArgumentList $EditorArgs
 			}
 			Pop-Location
-			$NoteText = Get-Content -Path $notesdir\temp_note.txt -Encoding UTF8
-			$NoteText = $NoteText -Join ' //' # Replace newlines with double slashes.
+			$NoteText = Get-Content -Path $notesdir\temp_note.txt -Encoding UTF8 -Raw
+			$NoteText = $NoteText.Trim()
+			$NoteText = $NoteText -Replace ("`r`n", ' //') # Replace newlines with double slashes.
+			$NoteText = $NoteText -Replace ("`n", ' //')
 			$NoteText = $NoteText -Replace (' //([^ ])', ' // $1') # Add a space after each double slash.
-			$NoteText = $NoteText -Replace ('/s+///s+', ' // ') # Remove extra spaces around double slashes.
+			$NoteText = $NoteText -Replace ('\s+//\s+', ' // ') # Remove extra spaces around double slashes.
 			Remove-Item -Path $notesdir\temp_note.txt
 		}
 

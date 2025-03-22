@@ -30,7 +30,8 @@ function Select-Note {
 	param(
 		[Parameter(Position=0, Mandatory=$true)][String[]] $Pattern,
 		[Switch] $Daily,
-		[Switch] $Old
+		[Switch] $Old,
+		[Switch] $Or
 	)
 
 	Begin {
@@ -41,6 +42,13 @@ function Select-Note {
 	}
 
 	Process {
+		$AndPattern = $(foreach ($Term in $Pattern) { "(?=.*$Term)" }) | Join-String
+		# Default to AND search using Regex
+		if ($Or) {
+			$SearchPattern = $Pattern
+		} else {
+			$SearchPattern = $AndPattern
+		}
 		$Regex = ($TNConfig.prefixes | Foreach-Object { "^$_" }) -join "|"
 		if ($Daily) {
 			$Regex += "|^\d{4}-\d{2}-\d{2}"
@@ -54,7 +62,7 @@ function Select-Note {
 		Write-Host
 		Get-ChildItem -Path $notesdir -Recurse -Filter "*.txt" `
 		| Where-Object { $_.BaseName -match $Regex } `
-		| Select-String -Pattern $Pattern `
+		| Select-String -Pattern $SearchPattern `
 		| Tee-Object -Variable SelectStringResults `
 		| Foreach-Object {
 			$Folder = Split-Path (Split-Path $_.Path -Parent) -Leaf

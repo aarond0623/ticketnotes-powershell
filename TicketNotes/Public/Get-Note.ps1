@@ -193,7 +193,7 @@ function Get-LastNote() {
 				Write-Host "    $line"
 			}
 			$TicketText[-1] = $TicketText[-1] -Replace ('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}: ','')
-			$TicketText[-1] = $TicketText[-1] -Replace ("^\[($($TNConfig.subprefixes -join '|'))\] ", '')
+			$TicketText[-1] = $TicketText[-1] -Replace ("^\[($($TNConfig.subprefixes -join '|'))\d+\] ", '')
 			$TicketText[-1] = $TicketText[-1] -Replace ('(?<= )// ', "`n")
 			try {
 				Set-Clipboard $TicketText[-1]
@@ -205,7 +205,7 @@ function Get-LastNote() {
 				Write-Host "    $line"
 			}
 			$TicketText = $TicketText -Replace ('^\d{4}-\d{2}-\d{2} \d{2}:\d{2}: ','')
-			$TicketText = $TicketText -Replace ("^\[($($TNConfig.subprefixes -join '|'))\] ", '')
+			$TicketText = $TicketText -Replace ("^\[($($TNConfig.subprefixes -join '|'))\d+\] ", '')
 			$TicketText = $TicketText -Replace ('(?<= )// ', "`n")
 			try {
 				Set-Clipboard $TicketText
