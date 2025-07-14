@@ -42,7 +42,7 @@ function Select-Note {
 	}
 
 	Process {
-		$AndPattern = $(foreach ($Term in $Pattern) { "(?=.*$Term)" }) | Join-String
+		$AndPattern = $(foreach ($Term in $Pattern) { "(?=.*$Term)" }) -join ""
 		# Default to AND search using Regex
 		if ($Or) {
 			$SearchPattern = $Pattern
